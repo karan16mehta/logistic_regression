@@ -150,3 +150,28 @@ adult$type_employer <- sapply(adult$type_employer,factor)
 adult$marital <- sapply(adult$marital,factor)
 adult$country <- sapply(adult$country,factor)
 
+# Missing Data
+install.packages("Amelia")
+library(Amelia)
+
+# converting ? to NA
+adult[adult=="?"] <- NA
+table(adult$type_employer)
+
+
+str(adult)
+
+adult$occupation <- sapply(adult$occupation,factor)
+
+# finding the missing values
+
+missmap(adult)
+# getting rid of Y lable
+missmap(adult,y.at=c(1),y.labels = c(''),col=c('yellow','black'))
+
+#droping na values
+adult <- na.omit(adult)
+
+missmap(adult,y.at=c(1),y.labels = c(''),col=c('yellow','black'))
+
+
