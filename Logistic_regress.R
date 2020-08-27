@@ -47,3 +47,106 @@ unemp <- function(job){
 adult$type_employer <- sapply(adult$type_employer,unemp)
 
 table(adult$type_employer)
+
+# code for merging state-gov and local-gov into SL-gov
+groupunemp <- function(job){
+  job <- as.character(job)
+  if (job =="State-gov"| job=="Local-gov") {
+    return("SL-gov")
+    
+  }else{
+    return(job)
+  }
+}
+
+adult$type_employer <- sapply(adult$type_employer,groupunemp)
+
+#code for merging self employed jobs and self employed inc into self-emp
+
+groupselfemp <- function(job){
+  job <- as.character(job)
+  if (job=="Self-emp-inc" | job =="Self-emp-not-inc") {
+    return("self-emp")
+    
+  }else{
+    return(job)
+  }
+}
+
+adult$type_employer <- sapply(adult$type_employer,groupselfemp)
+
+
+#look at marital column
+table(adult$marital)
+
+# reducing marital column into 3 groups married, not married, never married
+
+gmaritals <- function(mar){
+  mar <- as.character(mar)
+  if (mar=="Separated"|mar=="Divorced"|mar=="Widowed") {
+return("Not-married")    
+  }
+  else if(mar=="Never-married"){
+    return(mar)
+  } else{return("Married")}
+} 
+
+
+adult$marital <- sapply(adult$marital,gmaritals)
+
+table(adult$marital)
+
+# checking country column 
+table(adult$country)
+
+str(adult$country)
+levels(adult$country)
+unique(adult$country)
+levels(as.factor(adult$country))
+# grouping the country in according to the continent
+
+
+Asia <- c('China','Hong','India','Iran','Cambodia','Japan', 'Laos' ,
+          'Philippines' ,'Vietnam' ,'Taiwan', 'Thailand')
+
+North.America <- c('Canada','United-States','Puerto-Rico' )
+
+Europe <- c('England' ,'France', 'Germany' ,'Greece','Holand-Netherlands','Hungary',
+            'Ireland','Italy','Poland','Portugal','Scotland','Yugoslavia')
+
+Latin.and.South.America <- c('Columbia','Cuba','Dominican-Republic','Ecuador',
+                             'El-Salvador','Guatemala','Haiti','Honduras',
+                             'Mexico','Nicaragua','Outlying-US(Guam-USVI-etc)','Peru',
+                             'Jamaica','Trinadad&Tobago')
+Other <- c('South')
+
+
+
+
+continent <- function(con){
+  
+  if(con %in% Asia){
+    return("Asia")
+  }
+  else if (con %in% North.America){
+    return("North America")
+  }else if (con %in% Europe){return("Europe")}
+  else if (con %in% Latin.and.South.America){
+    return("Latin and South America")
+  }else{
+    return("Other")
+  }
+}
+
+
+adult$country <- sapply(adult$country,continent)
+table(adult$country)
+
+# converting the columns in we changes into factors
+
+str(adult)
+
+adult$type_employer <- sapply(adult$type_employer,factor)
+adult$marital <- sapply(adult$marital,factor)
+adult$country <- sapply(adult$country,factor)
+
