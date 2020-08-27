@@ -174,4 +174,22 @@ adult <- na.omit(adult)
 
 missmap(adult,y.at=c(1),y.labels = c(''),col=c('yellow','black'))
 
+# EDA
+
+library(ggplot2)
+library(dplyr)
+
+# plotting histogram of ages,colored by income
+
+ggplot(adult, aes(age))+geom_histogram(aes(fill=income), color='black',binwidth = 1) + theme_bw()
+
+
+# histogram of hours worked per week
+
+ggplot(adult,aes(hr_per_week))+geom_histogram()+theme_bw()
+
+# changing the name of country column to Region
+adult <- adult %>% rename(Region=country)
+
+ggplot(adult, aes(Region))+geom_bar(aes(fill = income))+theme_bw()+theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
