@@ -193,3 +193,38 @@ adult <- adult %>% rename(Region=country)
 
 ggplot(adult, aes(Region))+geom_bar(aes(fill = income))+theme_bw()+theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
+# buildng logistic model
+
+head(adult,6)
+
+# loading catool library for spliting the data into test and train
+
+library(caTools)
+
+#setting seed
+set.seed(101)
+
+#splitting the sample
+sample <- sample.split(adult$income,SplitRatio = .70)
+
+train <- subset(adult,sample==TRUE)
+test <- subset(adult,sample==FALSE)
+
+
+model = glm(income~.,family = binomial(logit),data=train)
+summary(model)
+
+
+# we will use step method to remove non significant predictor variable
+
+model2 <- step(model)
+
+
+# prediciting the test with model 1 
+test$predincome <- predict(model,newdata = test, type='response')
+
+# confusion matrix
+table(test$income,test$predincome >0.5)
+
+# accuracy
+(6372+1423)/(6372+548+872+1423)
